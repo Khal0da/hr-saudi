@@ -1,0 +1,112 @@
+{
+ "actions": [],
+ "autoname": "format:BM-{YYYY}-{####}",
+ "creation": "2026-05-23 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "employee",
+  "employee_name",
+  "device_user_id",
+  "biometric_device",
+  "column_break_1",
+  "is_active",
+  "registered_date",
+  "section_break_2",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "fetch_from": "employee.employee_name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "device_user_id",
+   "fieldtype": "Data",
+   "label": "Device User ID",
+   "reqd": 1,
+   "in_list_view": 1,
+   "description": "الرقم المسجل على جهاز البصمة"
+  },
+  {
+   "fieldname": "biometric_device",
+   "fieldtype": "Link",
+   "label": "Biometric Device",
+   "options": "Biometric Device",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Active",
+   "default": "1"
+  },
+  {
+   "fieldname": "registered_date",
+   "fieldtype": "Date",
+   "label": "Registered Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_2",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-05-23 00:00:00",
+ "modified_by": "Administrator",
+ "module": "HR Saudi",
+ "name": "Biometric User Mapping",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "role": "HR Manager"
+  },
+  {
+   "read": 1,
+   "role": "HR Officer"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

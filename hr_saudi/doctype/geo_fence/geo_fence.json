@@ -1,0 +1,136 @@
+{
+ "actions": [],
+ "autoname": "field:fence_name",
+ "creation": "2026-05-23 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "fence_name",
+  "project",
+  "column_break_1",
+  "is_active",
+  "section_break_2",
+  "latitude",
+  "longitude",
+  "column_break_2",
+  "radius_meters",
+  "section_break_3",
+  "qr_code",
+  "column_break_3",
+  "address"
+ ],
+ "fields": [
+  {
+   "fieldname": "fence_name",
+   "fieldtype": "Data",
+   "label": "Fence Name",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Active",
+   "default": "1"
+  },
+  {
+   "fieldname": "section_break_2",
+   "fieldtype": "Section Break",
+   "label": "Location"
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Float",
+   "label": "Latitude",
+   "reqd": 1,
+   "precision": "8"
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Float",
+   "label": "Longitude",
+   "reqd": 1,
+   "precision": "8"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "radius_meters",
+   "fieldtype": "Int",
+   "label": "Radius (meters)",
+   "default": "200",
+   "description": "Allowed radius for GPS check-in"
+  },
+  {
+   "fieldname": "section_break_3",
+   "fieldtype": "Section Break",
+   "label": "QR Code"
+  },
+  {
+   "fieldname": "qr_code",
+   "fieldtype": "Attach Image",
+   "label": "QR Code",
+   "description": "QR code printed at the site"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-05-23 00:00:00",
+ "modified_by": "Administrator",
+ "module": "HR Saudi",
+ "name": "Geo Fence",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "role": "HR Manager"
+  },
+  {
+   "read": 1,
+   "role": "Employee (Self Service)"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

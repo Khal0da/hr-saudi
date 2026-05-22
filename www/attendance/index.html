@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2d7d46">
+    <title>تسجيل الحضور</title>
+    <link rel="manifest" href="/assets/hr_saudi/manifest.json">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            background: #f0f2f5;
+            direction: rtl;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(135deg, #2d7d46, #1a5c30);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .header h1 { font-size: 20px; margin-bottom: 4px; }
+        .header p { font-size: 13px; opacity: 0.9; }
+        .container { max-width: 420px; margin: 0 auto; padding: 16px; }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #666; }
+        .info-value { font-weight: 600; color: #333; }
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-checkin { background: #28a745; color: white; }
+        .btn-checkout { background: #dc3545; color: white; }
+        .btn-qr { background: #007bff; color: white; }
+        .status {
+            text-align: center;
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+        .location-status {
+            text-align: center;
+            padding: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+        .offline-badge {
+            background: #ffc107;
+            color: #333;
+            text-align: center;
+            padding: 8px;
+            font-size: 12px;
+            display: none;
+        }
+        .login-form input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 12px;
+            direction: rtl;
+        }
+        .login-form input:focus { border-color: #2d7d46; outline: none; }
+        .login-form .btn { background: #2d7d46; color: white; }
+        .sync-indicator {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-badge" id="offline-badge">
+        ⚠️ وضع عدم الاتصال - سيتم المزامنة عند العودة
+    </div>
+
+    <div class="header">
+        <h1>تسجيل الحضور</h1>
+        <p>HR Saudi - Enterprise Workforce Platform</p>
+    </div>
+
+    <div class="container">
+        <div id="login-section" class="card" style="display:none;">
+            <h3 style="margin-bottom:16px;">تسجيل الدخول</h3>
+            <div class="login-form">
+                <input type="text" id="employee-input" placeholder="رقم الموظف (EMP-001)">
+                <button class="btn" onclick="login()">دخول</button>
+            </div>
+        </div>
+
+        <div id="main-section" style="display:none;">
+            <div class="card">
+                <div class="info-row">
+                    <span class="info-label">الموظف</span>
+                    <span class="info-value" id="employee-name">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">الفرع</span>
+                    <span class="info-value" id="employee-branch">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">التاريخ</span>
+                    <span class="info-value" id="current-date">-</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="location-status" id="location-status">
+                    📍 جاري تحديد الموقع...
+                </div>
+            </div>
+
+            <div class="card">
+                <button class="btn btn-checkin" id="checkin-btn" disabled onclick="checkIn('In')">
+                    ✅ تسجيل حضور
+                </button>
+                <button class="btn btn-checkout" id="checkout-btn" disabled onclick="checkIn('Out')">
+                    🚪 تسجيل انصراف
+                </button>
+                <button class="btn btn-qr" id="qr-btn" onclick="scanQR()">
+                    📱 مسح QR Code
+                </button>
+            </div>
+
+            <div id="status-message"></div>
+
+            <div class="sync-indicator" id="sync-indicator"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script>
+        let userPosition = null;
+        let employeeId = null;
+        let employeeName = null;
+        let employeeBranch = null;
+        const ERP_URL = window.location.origin;
+
+        function initEmployee() {
+            const params = new URLSearchParams(window.location.search);
+            employeeId = params.get('employee');
+            if (employeeId) {
+                loadEmployeeInfo();
+            } else {
+                document.getElementById('login-section').style.display = 'block';
+            }
+        }
+
+        function login() {
+            employeeId = document.getElementById('employee-input').value.trim();
+            if (employeeId) {
+                window.location.href = window.location.pathname + '?employee=' + employeeId;
+            }
+        }
+
+        async function loadEmployeeInfo() {
+            try {
+                const response = await fetch(
+                    `${ERP_URL}/api/resource/Employee/${employeeId}?fields=["employee_name","branch"]`
+                );
+                const data = await response.json();
+                employeeName = data.data.employee_name;
+                employeeBranch = data.data.branch || '-';
+
+                document.getElementById('employee-name').textContent = employeeName;
+                document.getElementById('employee-branch').textContent = employeeBranch;
+                document.getElementById('current-date').textContent = new Date().toLocaleDateString('ar-SA');
+                document.getElementById('main-section').style.display = 'block';
+                document.getElementById('login-section').style.display = 'none';
+
+                getLocation();
+            } catch (e) {
+                showStatus('error', 'فشل في تحميل بيانات الموظف');
+                document.getElementById('login-section').style.display = 'block';
+            }
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        userPosition = {
+                            lat: pos.coords.latitude,
+                            lng: pos.coords.longitude,
+                            accuracy: pos.coords.accuracy
+                        };
+                        document.getElementById('location-status').textContent =
+                            `📍 الموقع محدد (الدقة: ${Math.round(pos.coords.accuracy)}م)`;
+                        enableButtons();
+                    },
+                    (err) => {
+                        document.getElementById('location-status').textContent =
+                            '❌ فشل في تحديد الموقع - تأكد من تفعيل GPS';
+                    },
+                    { enableHighAccuracy: true, timeout: 15000 }
+                );
+            }
+        }
+
+        function enableButtons() {
+            document.getElementById('checkin-btn').disabled = false;
+            document.getElementById('checkout-btn').disabled = false;
+        }
+
+        async function checkIn(direction) {
+            if (!userPosition || !employeeId) return;
+
+            const btn = direction === 'In' ?
+                document.getElementById('checkin-btn') :
+                document.getElementById('checkout-btn');
+            btn.disabled = true;
+            btn.textContent = '⏳ جاري الإرسال...';
+
+            try {
+                const response = await fetch(
+                    `${ERP_URL}/api/method/hr_saudi.api.mobile_attendance.gps_checkin`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            employee_id: employeeId,
+                            latitude: userPosition.lat,
+                            longitude: userPosition.lng,
+                            accuracy: userPosition.accuracy
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                if (result.message && result.message.success) {
+                    showStatus('success',
+                        `تم تسجيل ${direction === 'In' ? 'الحضور' : 'الانصراف'} بنجاح`);
+                } else {
+                    showStatus('error', (result.message && result.message.error) || 'فشل في التسجيل');
+                }
+            } catch (err) {
+                showStatus('error', 'فشل في الاتصال بالخادم - تم التخزين محليًا');
+                storeOffline(employeeId, userPosition, direction);
+            }
+
+            btn.disabled = false;
+            btn.textContent = direction === 'In' ? '✅ تسجيل حضور' : '🚪 تسجيل انصراف';
+        }
+
+        async function scanQR() {
+            if (typeof Html5QrcodeScanner === 'undefined') {
+                showStatus('error', 'مكتبة QR غير متاحة');
+                return;
+            }
+
+            const scanner = new Html5QrcodeScanner({
+                fps: 10,
+                qrbox: { width: 250, height: 250 }
+            });
+
+            scanner.render((qrData) => {
+                scanner.clear();
+                processQR(qrData);
+            }, (error) => {});
+        }
+
+        async function processQR(qrData) {
+            if (!userPosition || !employeeId) return;
+
+            showStatus('info', 'جاري التحقق...');
+
+            try {
+                const response = await fetch(
+                    `${ERP_URL}/api/method/hr_saudi.api.mobile_attendance.qr_checkin`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            employee_id: employeeId,
+                            qr_data: qrData,
+                            latitude: userPosition.lat,
+                            longitude: userPosition.lng
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                if (result.message && result.message.success) {
+                    showStatus('success', 'تم تسجيل الحضور بنجاح');
+                } else {
+                    showStatus('error', (result.message && result.message.error) || 'QR غير صالح');
+                }
+            } catch (err) {
+                showStatus('error', 'فشل في الاتصال');
+            }
+        }
+
+        function storeOffline(employeeId, position, direction) {
+            const db = openDB('hr-attendance-offline', 1, {
+                upgrade(db) {
+                    db.createObjectStore('queue', { keyPath: 'id', autoIncrement: true });
+                }
+            });
+
+            db.then(d => {
+                d.add('queue', {
+                    employee_id: employeeId,
+                    lat: position.lat,
+                    lng: position.lng,
+                    direction: direction,
+                    timestamp: Date.now(),
+                    synced: false
+                });
+                updateSyncIndicator();
+            });
+        }
+
+        async function syncOffline() {
+            const db = await openDB('hr-attendance-offline', 1);
+            const all = await db.getAll('queue');
+            const pending = all.filter(r => !r.synced);
+
+            for (const record of pending) {
+                try {
+                    await fetch(
+                        `${ERP_URL}/api/method/hr_saudi.api.mobile_attendance.gps_checkin`,
+                        {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                employee_id: record.employee_id,
+                                latitude: record.lat,
+                                longitude: record.lng
+                            })
+                        }
+                    );
+                    record.synced = true;
+                    await db.put('queue', record);
+                } catch (e) {}
+            }
+            updateSyncIndicator();
+        }
+
+        function updateSyncIndicator() {
+            openDB('hr-attendance-offline', 1).then(async (db) => {
+                const all = await db.getAll('queue');
+                const pending = all.filter(r => !r.synced).length;
+                const indicator = document.getElementById('sync-indicator');
+                if (pending > 0) {
+                    indicator.textContent = `⏳ ${pending} سجل في انتظار المزامنة`;
+                } else {
+                    indicator.textContent = '✅ جميع السجلات متزامنة';
+                }
+            });
+        }
+
+        function showStatus(type, message) {
+            const el = document.getElementById('status-message');
+            el.className = `status ${type}`;
+            el.textContent = message;
+            setTimeout(() => { el.textContent = ''; }, 5000);
+        }
+
+        async function openDB(name, version, options) {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(name, version);
+                if (options && options.upgrade) {
+                    request.onupgradeneeded = (e) => options.upgrade(e.target.result);
+                }
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        window.addEventListener('online', () => {
+            document.getElementById('offline-badge').style.display = 'none';
+            syncOffline();
+        });
+
+        window.addEventListener('offline', () => {
+            document.getElementById('offline-badge').style.display = 'block';
+        });
+
+        initEmployee();
+    </script>
+</body>
+</html>

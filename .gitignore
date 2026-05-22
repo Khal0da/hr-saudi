@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+
+# Frappe
+node_modules/
+*.sqlite
+*.log
+*.pid
+*.swp
+*.swo
+*.bak
+
+# Biometric Bridge
+hr_saudi/bridge/config.yaml
+hr_saudi/bridge/attendance_queue.db
+hr_saudi/bridge/bridge.log
+hr_saudi/bridge/logs/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+venv/
+env/

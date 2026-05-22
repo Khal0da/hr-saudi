@@ -1,0 +1,26 @@
+{
+  "name": "تسجيل الحضور - HR Saudi",
+  "short_name": "HR Attendance",
+  "description": "Mobile attendance check-in via GPS and QR Code",
+  "start_url": "/attendance/",
+  "display": "standalone",
+  "background_color": "#f0f2f5",
+  "theme_color": "#2d7d46",
+  "orientation": "portrait",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "/assets/hr_saudi/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/hr_saudi/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

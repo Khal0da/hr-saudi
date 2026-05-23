@@ -33,6 +33,8 @@ def generate_daily_attendance(date=None):
 
 	settings = frappe.get_single("Attendance Settings")
 	late_threshold = settings.late_threshold or 15
+	grace_period = settings.grace_period or 10
+	expected_start_time = settings.expected_start_time or "09:00:00"
 
 	for emp, emp_logs in employee_logs.items():
 		if frappe.db.exists("Attendance", {
@@ -50,13 +52,14 @@ def generate_daily_attendance(date=None):
 		first_in = min(get_datetime(l["timestamp"]) for l in in_logs)
 		last_out = max(get_datetime(l["timestamp"]) for l in out_logs) if out_logs else None
 
-		late_minutes = 0
-		expected_start = get_datetime(f"{date} 09:00:00")
-		if first_in > expected_start:
-			late_minutes = minutes_diff(first_in, expected_start)
+		expected_start = get_datetime(f"{date} {expected_start_time}")
+		total_late = minutes_diff(first_in, expected_start) if first_in > expected_start else 0
+		
+		# Apply grace period
+		effective_late = max(0, total_late - grace_period)
 
 		status = "Present"
-		if late_minutes > (settings.half_day_threshold or 60):
+		if effective_late > (settings.half_day_threshold or 60):
 			status = "Half Day"
 
 		employee_branch = frappe.db.get_value("Employee", emp, "branch")
@@ -71,11 +74,48 @@ def generate_daily_attendance(date=None):
 		})
 		attendance.insert(ignore_permissions=True)
 
-		if late_minutes > late_threshold:
-			attendance.custom_late_minutes = late_minutes
+		if effective_late > late_threshold:
+			attendance.custom_late_minutes = int(effective_late)
+			
+			# Apply late deduction if enabled
+			if settings.late_deduction_enabled and effective_late > settings.late_deduction_after_minutes:
+				attendance.custom_late_deduction = settings.late_deduction_amount
+			
 			attendance.save()
+			
+			# Send late notification
+			if settings.send_late_notification:
+				send_late_notification(attendance, effective_late)
 
 	frappe.db.commit()
+
+
+def send_late_notification(attendance_doc, late_minutes):
+	"""Send email notification for late attendance"""
+	try:
+		settings = frappe.get_single("Attendance Settings")
+		employee = frappe.get_doc("Employee", attendance_doc.employee)
+		
+		subject = f"Late Attendance Alert - {employee.employee_name}"
+		message = f"""
+		<p>Employee: {employee.employee_name}</p>
+		<p>Employee ID: {attendance_doc.employee}</p>
+		<p>Date: {attendance_doc.attendance_date}</p>
+		<p>Late by: {late_minutes} minutes</p>
+		<p>Check In: {attendance_doc.check_in}</p>
+		"""
+		
+		if settings.late_deduction_enabled and late_minutes > settings.late_deduction_after_minutes:
+			message += f"<p><strong>Late Deduction Applied: SAR {settings.late_deduction_amount}</strong></p>"
+		
+		frappe.sendmail(
+			recipients=[settings.late_notification_email or "hr@company.com"],
+			subject=subject,
+			message=message,
+			delayed=False
+		)
+	except Exception as e:
+		frappe.log_error(f"Failed to send late notification: {str(e)}")
 
 
 def generate_end_of_day_attendance():

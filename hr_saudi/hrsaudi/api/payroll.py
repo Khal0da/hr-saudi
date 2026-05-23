@@ -224,3 +224,15 @@ def export_payroll_by_project(project, month, year):
 	"""
 	
 	return html
+
+
+@frappe.whitelist()
+def download_payroll_pdf(project, month, year):
+	"""
+	Generate and download payroll PDF for a project
+	"""
+	html = export_payroll_by_project(project, month, year)
+	
+	frappe.local.response.filename = f"Payroll_{project}_{month}_{year}.pdf"
+	frappe.local.response.type = "pdf"
+	frappe.local.response.content = frappe.utils.pdf.get_pdf(html)

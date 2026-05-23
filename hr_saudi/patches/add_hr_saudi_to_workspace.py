@@ -33,6 +33,22 @@ def execute():
 				"Saudization Settings",
 			]
 		},
+		{
+			"label": "Subcontractor Management",
+			"type": "Card Break",
+			"links": [
+				"Subcontractor Worker",
+				"Subcontractor Attendance",
+				"Subcontractor Payroll",
+			]
+		},
+		{
+			"label": "Subcontractor Reports",
+			"type": "Card Break",
+			"links": [
+				"Subcontractor Utilization",
+			]
+		},
 	]
 	
 	existing_labels = [link.label for link in workspace.links if link.type == "Card Break"]
@@ -61,6 +77,20 @@ def execute():
 						"is_query_report": 0,
 						"onboard": 0,
 					})
+		
+		# Add reports as query reports
+		if card["label"] == "Subcontractor Reports":
+			report_name = "Subcontractor Utilization"
+			if frappe.db.exists("Report", report_name):
+				workspace.append("links", {
+					"label": report_name,
+					"link_to": report_name,
+					"link_type": "Report",
+					"type": "Link",
+					"hidden": 0,
+					"is_query_report": 1,
+					"onboard": 0,
+				})
 	
 	workspace.save()
 	frappe.db.commit()

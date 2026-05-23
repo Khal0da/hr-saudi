@@ -1,0 +1,121 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-05-23 06:41:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "worker",
+  "worker_name",
+  "trade",
+  "column_break_1",
+  "present_days",
+  "absent_days",
+  "total_hours",
+  "section_break_1",
+  "daily_rate",
+  "regular_amount",
+  "overtime_hours",
+  "column_break_2",
+  "overtime_rate",
+  "overtime_amount",
+  "total_amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "worker",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Worker",
+   "options": "Subcontractor Worker",
+   "reqd": 1
+  },
+  {
+   "fieldname": "worker_name",
+   "fieldtype": "Data",
+   "label": "Worker Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "trade",
+   "fieldtype": "Data",
+   "label": "Trade",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "present_days",
+   "fieldtype": "Int",
+   "label": "Present Days",
+   "reqd": 1
+  },
+  {
+   "fieldname": "absent_days",
+   "fieldtype": "Int",
+   "label": "Absent Days",
+   "default": 0
+  },
+  {
+   "fieldname": "total_hours",
+   "fieldtype": "Float",
+   "label": "Total Hours"
+  },
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "daily_rate",
+   "fieldtype": "Currency",
+   "label": "Daily Rate",
+   "reqd": 1
+  },
+  {
+   "fieldname": "regular_amount",
+   "fieldtype": "Currency",
+   "label": "Regular Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "overtime_hours",
+   "fieldtype": "Float",
+   "label": "Overtime Hours"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "overtime_rate",
+   "fieldtype": "Currency",
+   "label": "Overtime Rate"
+  },
+  {
+   "fieldname": "overtime_amount",
+   "fieldtype": "Currency",
+   "label": "Overtime Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount",
+   "read_only": 1
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-23 06:41:00.000000",
+ "modified_by": "Administrator",
+ "module": "HRSaudi",
+ "name": "Subcontractor Payroll Worker",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

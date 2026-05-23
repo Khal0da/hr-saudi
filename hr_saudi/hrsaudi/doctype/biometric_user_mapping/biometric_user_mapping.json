@@ -7,6 +7,8 @@
  "field_order": [
   "employee",
   "employee_name",
+  "subcontractor_worker",
+  "subcontractor",
   "device_user_id",
   "biometric_device",
   "column_break_1",
@@ -24,13 +26,28 @@
    "reqd": 1,
    "in_list_view": 1
   },
-  {
-   "fieldname": "employee_name",
-   "fieldtype": "Data",
-   "label": "Employee Name",
-   "fetch_from": "employee.employee_name",
-   "read_only": 1
-  },
+   {
+    "fieldname": "employee_name",
+    "fieldtype": "Data",
+    "label": "Employee Name",
+    "fetch_from": "employee.employee_name",
+    "read_only": 1
+   },
+   {
+    "fieldname": "subcontractor_worker",
+    "fieldtype": "Link",
+    "label": "Subcontractor Worker",
+    "options": "Subcontractor Worker",
+    "depends_on": "eval: !doc.employee"
+   },
+   {
+    "fieldname": "subcontractor",
+    "fieldtype": "Link",
+    "label": "Subcontractor",
+    "options": "Supplier",
+    "fetch_from": "subcontractor_worker.subcontractor",
+    "read_only": 1
+   },
   {
    "fieldname": "device_user_id",
    "fieldtype": "Data",

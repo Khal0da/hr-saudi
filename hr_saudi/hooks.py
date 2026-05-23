@@ -22,6 +22,7 @@ scheduler_events = {
 	"daily": [
 		"hr_saudi.attendance.generator.generate_daily_attendance",
 		"hr_saudi.notification.document_expiry.check_expiring_documents",
+		"hr_saudi.doctype.saudization_settings.saudization_settings.update_daily_compliance",
 	],
 	"hourly": [
 		"hr_saudi.attendance.ot_calculator.calculate_pending_ot",

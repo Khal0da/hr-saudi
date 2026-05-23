@@ -6,6 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "late_threshold",
+  "grace_period",
   "half_day_threshold",
   "column_break_1",
   "ot_multiplier",
@@ -13,23 +14,37 @@
   "auto_generate_attendance",
   "attendance_generation_time",
   "column_break_2",
-  "expected_start_time"
+  "expected_start_time",
+  "section_break_3",
+  "late_deduction_enabled",
+  "late_deduction_amount",
+  "late_deduction_after_minutes",
+  "column_break_3",
+  "send_late_notification",
+  "late_notification_email"
  ],
  "fields": [
-  {
-   "fieldname": "late_threshold",
-   "fieldtype": "Int",
-   "label": "Late Threshold (minutes)",
-   "default": "15",
-   "description": "Minutes allowed before marking as late"
-  },
-  {
-   "fieldname": "half_day_threshold",
-   "fieldtype": "Int",
-   "label": "Half Day Threshold (minutes)",
-   "default": "60",
-   "description": "Minutes after which attendance is marked as Half Day"
-  },
+   {
+    "fieldname": "late_threshold",
+    "fieldtype": "Int",
+    "label": "Late Threshold (minutes)",
+    "default": "15",
+    "description": "Minutes allowed before marking as late"
+   },
+   {
+    "fieldname": "grace_period",
+    "fieldtype": "Int",
+    "label": "Grace Period (minutes)",
+    "default": "10",
+    "description": "Additional grace period allowed for employees before marking as late"
+   },
+   {
+    "fieldname": "half_day_threshold",
+    "fieldtype": "Int",
+    "label": "Half Day Threshold (minutes)",
+    "default": "60",
+    "description": "Minutes after which attendance is marked as Half Day"
+   },
   {
    "fieldname": "column_break_1",
    "fieldtype": "Column Break"
@@ -62,14 +77,58 @@
    "fieldname": "column_break_2",
    "fieldtype": "Column Break"
   },
-  {
-   "fieldname": "expected_start_time",
-   "fieldtype": "Time",
-   "label": "Expected Start Time",
-   "default": "09:00:00",
-   "description": "Standard work start time for late calculation"
-  }
- ],
+   {
+    "fieldname": "expected_start_time",
+    "fieldtype": "Time",
+    "label": "Expected Start Time",
+    "default": "09:00:00",
+    "description": "Standard work start time for late calculation"
+   },
+   {
+    "fieldname": "section_break_3",
+    "fieldtype": "Section Break",
+    "label": "Late Deduction Policy"
+   },
+   {
+    "fieldname": "late_deduction_enabled",
+    "fieldtype": "Check",
+    "label": "Enable Late Deduction",
+    "default": "0"
+   },
+   {
+    "fieldname": "late_deduction_amount",
+    "fieldtype": "Currency",
+    "label": "Late Deduction Amount (SAR)",
+    "default": "0",
+    "depends_on": "eval:doc.late_deduction_enabled"
+   },
+   {
+    "fieldname": "late_deduction_after_minutes",
+    "fieldtype": "Int",
+    "label": "Deduct After (minutes)",
+    "default": "30",
+    "depends_on": "eval:doc.late_deduction_enabled",
+    "description": "Apply deduction if employee is late by more than these minutes"
+   },
+   {
+    "fieldname": "column_break_3",
+    "fieldtype": "Column Break"
+   },
+   {
+    "fieldname": "send_late_notification",
+    "fieldtype": "Check",
+    "label": "Send Late Notification Email",
+    "default": "1"
+   },
+   {
+    "fieldname": "late_notification_email",
+    "fieldtype": "Data",
+    "label": "Notification Email",
+    "default": "hr@company.com",
+    "depends_on": "eval:doc.send_late_notification",
+    "description": "Email to send late notifications to"
+   }
+  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],

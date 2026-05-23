@@ -112,3 +112,115 @@ def generate_wps_batch(payroll_entry):
 	frappe.db.commit()
 	
 	return batch.name
+
+
+@frappe.whitelist()
+def export_payroll_by_project(project, month, year):
+	"""
+	Export payroll for a specific project as PDF
+	Returns HTML content for PDF generation
+	"""
+	from frappe.utils import get_first_day, get_last_day
+	
+	first_day = get_first_day(f"{year}-{month}-01")
+	last_day = get_last_day(f"{year}-{month}-01")
+	
+	# Get all salary slips for the project in the given month
+	salary_slips = frappe.get_all("Salary Slip",
+		filters={
+			"custom_project": project,
+			"start_date": ["between", [first_day, last_day]],
+			"docstatus": 1
+		},
+		fields=["employee", "employee_name", "designation", "branch", "base", "gross_pay", 
+				"total_deduction", "net_pay", "custom_gosi_employee_amount", "custom_gosi_employer_amount"]
+	)
+	
+	if not salary_slips:
+		frappe.throw(f"No payroll records found for project {project} in {month}/{year}")
+	
+	# Calculate totals
+	total_basic = sum(ss.base for ss in salary_slips)
+	total_gross = sum(ss.gross_pay for ss in salary_slips)
+	total_deductions = sum(ss.total_deduction for ss in salary_slips)
+	total_net = sum(ss.net_pay for ss in salary_slips)
+	total_gosi_employee = sum(ss.custom_gosi_employee_amount or 0 for ss in salary_slips)
+	total_gosi_employer = sum(ss.custom_gosi_employer_amount or 0 for ss in salary_slips)
+	
+	# Generate HTML for PDF
+	html = f"""
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<style>
+			body {{ font-family: Arial, sans-serif; margin: 20px; }}
+			h1 {{ color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }}
+			table {{ width: 100%; border-collapse: collapse; margin-top: 20px; }}
+			th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
+			th {{ background-color: #3498db; color: white; }}
+			tr:nth-child(even) {{ background-color: #f2f2f2; }}
+			.totals {{ font-weight: bold; background-color: #e8e8e8; }}
+			.summary {{ margin-top: 20px; padding: 15px; background-color: #f9f9f9; border: 1px solid #ddd; }}
+			.summary p {{ margin: 5px 0; }}
+		</style>
+	</head>
+	<body>
+		<h1>Payroll Report - {project}</h1>
+		<p>Period: {first_day} to {last_day}</p>
+		<p>Total Employees: {len(salary_slips)}</p>
+		
+		<table>
+			<thead>
+				<tr>
+					<th>Employee ID</th>
+					<th>Employee Name</th>
+					<th>Designation</th>
+					<th>Basic Salary</th>
+					<th>Gross Pay</th>
+					<th>GOSI (Employee)</th>
+					<th>Total Deductions</th>
+					<th>Net Pay</th>
+				</tr>
+			</thead>
+			<tbody>
+	"""
+	
+	for ss in salary_slips:
+		html += f"""
+			<tr>
+				<td>{ss.employee}</td>
+				<td>{ss.employee_name}</td>
+				<td>{ss.designation or '-'}</td>
+				<td>{ss.base:,.2f}</td>
+				<td>{ss.gross_pay:,.2f}</td>
+				<td>{ss.custom_gosi_employee_amount or 0:,.2f}</td>
+				<td>{ss.total_deduction:,.2f}</td>
+				<td>{ss.net_pay:,.2f}</td>
+			</tr>
+		"""
+	
+	html += f"""
+			<tr class="totals">
+				<td colspan="3">TOTALS</td>
+				<td>{total_basic:,.2f}</td>
+				<td>{total_gross:,.2f}</td>
+				<td>{total_gosi_employee:,.2f}</td>
+				<td>{total_deductions:,.2f}</td>
+				<td>{total_net:,.2f}</td>
+			</tr>
+			</tbody>
+		</table>
+		
+		<div class="summary">
+			<h3>Summary</h3>
+			<p><strong>Total Gross Pay:</strong> SAR {total_gross:,.2f}</p>
+			<p><strong>Total GOSI (Employee):</strong> SAR {total_gosi_employee:,.2f}</p>
+			<p><strong>Total GOSI (Employer):</strong> SAR {total_gosi_employer:,.2f}</p>
+			<p><strong>Total Deductions:</strong> SAR {total_deductions:,.2f}</p>
+			<p><strong>Total Net Pay:</strong> SAR {total_net:,.2f}</p>
+		</div>
+	</body>
+	</html>
+	"""
+	
+	return html

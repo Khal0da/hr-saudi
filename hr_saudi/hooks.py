@@ -39,10 +39,40 @@ scheduler_events = {
 custom_fields = {
 	"Employee": [
 		{
+			"fieldname": "custom_nationality",
+			"label": "Nationality",
+			"fieldtype": "Link",
+			"options": "Nationality",
+			"insert_after": "date_of_birth"
+		},
+		{
+			"fieldname": "custom_id_type",
+			"label": "ID Type",
+			"fieldtype": "Select",
+			"options": "National ID\nIqama\nPassport",
+			"default": "National ID",
+			"insert_after": "custom_nationality",
+			"description": "National ID (starts with 1) = Saudi, Iqama (starts with 2) = Non-Saudi"
+		},
+		{
+			"fieldname": "custom_id_number",
+			"label": "ID Number",
+			"fieldtype": "Data",
+			"insert_after": "custom_id_type",
+			"description": "Enter National ID or Iqama number"
+		},
+		{
+			"fieldname": "custom_is_saudi",
+			"label": "Is Saudi",
+			"fieldtype": "Check",
+			"read_only": 1,
+			"insert_after": "custom_id_number"
+		},
+		{
 			"fieldname": "passport_number",
 			"label": "Passport Number",
 			"fieldtype": "Data",
-			"insert_after": "national_id_expiry"
+			"insert_after": "custom_is_saudi"
 		},
 		{
 			"fieldname": "passport_expiry",
@@ -51,10 +81,22 @@ custom_fields = {
 			"insert_after": "passport_number"
 		},
 		{
+			"fieldname": "custom_passport_image",
+			"label": "Passport Image",
+			"fieldtype": "Attach Image",
+			"insert_after": "passport_expiry"
+		},
+		{
+			"fieldname": "custom_id_image",
+			"label": "ID/Iqama Image",
+			"fieldtype": "Attach Image",
+			"insert_after": "custom_passport_image"
+		},
+		{
 			"fieldname": "work_permit_number",
 			"label": "Work Permit Number",
 			"fieldtype": "Data",
-			"insert_after": "passport_expiry"
+			"insert_after": "custom_id_image"
 		},
 		{
 			"fieldname": "work_permit_expiry",
@@ -80,6 +122,19 @@ custom_fields = {
 			"fieldtype": "Select",
 			"options": "\nA-Executive\nB-Management\nC-Professional\nD-Technical\nE-Skilled\nF-Unskilled",
 			"insert_after": "designation"
+		},
+		{
+			"fieldname": "custom_bank_name",
+			"label": "Bank Name",
+			"fieldtype": "Data",
+			"insert_after": "bank_ac_no"
+		},
+		{
+			"fieldname": "custom_iban",
+			"label": "IBAN",
+			"fieldtype": "Data",
+			"insert_after": "custom_bank_name",
+			"description": "International Bank Account Number (starts with SA)"
 		},
 		{
 			"fieldname": "labor_camp",
@@ -115,6 +170,13 @@ custom_fields = {
 			"label": "Late Minutes",
 			"fieldtype": "Int",
 			"insert_after": "custom_shift_type"
+		},
+		{
+			"fieldname": "custom_late_deduction",
+			"label": "Late Deduction (SAR)",
+			"fieldtype": "Currency",
+			"insert_after": "custom_late_minutes",
+			"read_only": 1
 		},
 		{
 			"fieldname": "custom_ot_hours",
@@ -204,7 +266,10 @@ custom_fields = {
 
 doc_events = {
 	"Employee": {
-		"validate": "hr_saudi.hrsaudi.doctype.document_expiry_tracker.document_expiry_tracker.validate_expiry_dates",
+		"validate": [
+			"hr_saudi.hrsaudi.doctype.document_expiry_tracker.document_expiry_tracker.validate_expiry_dates",
+			"hr_saudi.hrsaudi.api.employee.validate_employee_id"
+		],
 	},
 	"Attendance": {
 		"validate": "hr_saudi.hrsaudi.attendance.validator.validate_attendance",

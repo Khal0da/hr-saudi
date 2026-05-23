@@ -1,0 +1,88 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:skill_name",
+ "creation": "2026-05-23 06:26:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "skill_name",
+  "skill_type",
+  "column_break_1",
+  "description",
+  "section_break_1",
+  "related_designations",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "skill_name",
+   "fieldtype": "Data",
+   "label": "Skill Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "skill_type",
+   "fieldtype": "Select",
+   "label": "Skill Type",
+   "options": "Technical\nSoft Skill\nSafety\nLanguage\nCertification",
+   "default": "Technical"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break",
+   "label": "Related Designations"
+  },
+  {
+   "fieldname": "related_designations",
+   "fieldtype": "Table",
+   "label": "Related Designations",
+   "options": "Skill Designation Link"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Skill",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-05-23 06:26:00.000000",
+ "modified_by": "Administrator",
+ "module": "HRSaudi",
+ "name": "Skill",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

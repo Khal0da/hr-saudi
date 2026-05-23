@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Payroll Distribution</span>\",\"col\":12}},{\"id\":\"2\",\"type\":\"card\",\"data\":{\"card_name\":\"Cost Distribution\",\"col\":4}}]",
+ "content": "[{\"id\":\"1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Payroll Distribution</span>\",\"col\":12}},{\"id\":\"2\",\"type\":\"card\",\"data\":{\"card_name\":\"Cost Distribution\",\"col\":4}},{\"id\":\"3\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports & Export\",\"col\":4}}]",
  "creation": "2026-05-23 07:22:00.000000",
  "docstatus": 0,
  "doctype": "Workspace",
@@ -21,15 +21,32 @@
    "onboard": 0,
    "type": "Card Break"
   },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Payroll Cost Distribution",
-   "link_to": "Payroll Cost Distribution",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  }
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Payroll Cost Distribution",
+    "link_to": "Payroll Cost Distribution",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Reports & Export",
+    "link_count": 1,
+    "onboard": 0,
+    "type": "Card Break"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 1,
+    "label": "Payroll Cost Distribution Center",
+    "link_to": "Payroll Cost Distribution Center",
+    "link_type": "Report",
+    "onboard": 0,
+    "type": "Link"
+   }
  ],
  "modified": "2026-05-23 07:22:00.000000",
  "modified_by": "Administrator",

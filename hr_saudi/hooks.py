@@ -12,24 +12,24 @@ app_version = "1.0.0"
 
 required_apps = ["erpnext", "construction_app"]
 
-before_install = "hr_saudi.setup.before_install"
-after_install = "hr_saudi.setup.after_install"
-after_migrate = "hr_saudi.setup.after_migrate"
+before_install = "hr_saudi.hrsaudi.setup.before_install"
+after_install = "hr_saudi.hrsaudi.setup.after_install"
+after_migrate = "hr_saudi.hrsaudi.setup.after_migrate"
 
 app_include_js = ["hr_saudi.bundle.js"]
 
 scheduler_events = {
 	"daily": [
-		"hr_saudi.attendance.generator.generate_daily_attendance",
-		"hr_saudi.notification.document_expiry.check_expiring_documents",
-		"hr_saudi.doctype.saudization_settings.saudization_settings.update_daily_compliance",
+		"hr_saudi.hrsaudi.attendance.generator.generate_daily_attendance",
+		"hr_saudi.hrsaudi.notification.document_expiry.check_expiring_documents",
+		"hr_saudi.hrsaudi.doctype.saudization_settings.saudization_settings.update_daily_compliance",
 	],
 	"hourly": [
-		"hr_saudi.attendance.ot_calculator.calculate_pending_ot",
+		"hr_saudi.hrsaudi.attendance.ot_calculator.calculate_pending_ot",
 	],
 	"cron": {
 		"0 23 * * *": [
-			"hr_saudi.attendance.generator.generate_end_of_day_attendance",
+			"hr_saudi.hrsaudi.attendance.generator.generate_end_of_day_attendance",
 		],
 	},
 }
@@ -188,12 +188,12 @@ custom_fields = {
 
 doc_events = {
 	"Employee": {
-		"validate": "hr_saudi.doctype.document_expiry_tracker.document_expiry_tracker.validate_expiry_dates",
+		"validate": "hr_saudi.hrsaudi.doctype.document_expiry_tracker.document_expiry_tracker.validate_expiry_dates",
 	},
 	"Attendance": {
-		"validate": "hr_saudi.attendance.validator.validate_attendance",
+		"validate": "hr_saudi.hrsaudi.attendance.validator.validate_attendance",
 	},
 	"Payroll Entry": {
-		"before_submit": "hr_saudi.api.payroll.validate_branch_payroll",
+		"before_submit": "hr_saudi.hrsaudi.api.payroll.validate_branch_payroll",
 	}
 }

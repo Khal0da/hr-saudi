@@ -1,5 +1,11 @@
 import frappe
-from frappe.utils import today, get_datetime, time_diff_in_minutes
+from frappe.utils import today, get_datetime, time_diff
+
+
+def minutes_diff(dt1, dt2):
+	"""Calculate difference in minutes between two datetimes"""
+	td = time_diff(str(dt1), str(dt2))
+	return int(td.total_seconds() / 60)
 
 
 def generate_daily_attendance(date=None):
@@ -47,7 +53,7 @@ def generate_daily_attendance(date=None):
 		late_minutes = 0
 		expected_start = get_datetime(f"{date} 09:00:00")
 		if first_in > expected_start:
-			late_minutes = time_diff_in_minutes(first_in, expected_start)
+			late_minutes = minutes_diff(first_in, expected_start)
 
 		status = "Present"
 		if late_minutes > (settings.half_day_threshold or 60):

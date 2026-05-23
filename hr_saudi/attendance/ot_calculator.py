@@ -1,5 +1,11 @@
 import frappe
-from frappe.utils import get_datetime, time_diff_in_minutes
+from frappe.utils import get_datetime, time_diff
+
+
+def minutes_diff(dt1, dt2):
+	"""Calculate difference in minutes between two datetimes"""
+	td = time_diff(str(dt1), str(dt2))
+	return int(td.total_seconds() / 60)
 
 
 def calculate_ot_hours(check_in, check_out, working_hours=8):
@@ -12,7 +18,7 @@ def calculate_ot_hours(check_in, check_out, working_hours=8):
 	if not check_out:
 		return 0, 0
 
-	actual_hours = time_diff_in_minutes(
+	actual_hours = minutes_diff(
 		get_datetime(check_in),
 		get_datetime(check_out)
 	) / 60.0

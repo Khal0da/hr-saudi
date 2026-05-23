@@ -1,5 +1,6 @@
 {
  "charts": [],
+ "content": "[{\"id\":\"1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Internal Transfers</span>\",\"col\":12}},{\"id\":\"2\",\"type\":\"card\",\"data\":{\"card_name\":\"Transfers\",\"col\":4}}]",
  "creation": "2026-05-23 07:23:00.000000",
  "docstatus": 0,
  "doctype": "Workspace",
@@ -7,6 +8,8 @@
  "hide_custom": 0,
  "icon": "change",
  "idx": 0,
+ "indicator_color": "gray",
+ "is_editable": 1,
  "is_hidden": 0,
  "label": "Internal Transfers",
  "links": [

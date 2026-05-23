@@ -1,5 +1,6 @@
 {
  "charts": [],
+ "content": "[{\"id\":\"1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Subcontractor Management</span>\",\"col\":12}},{\"id\":\"2\",\"type\":\"card\",\"data\":{\"card_name\":\"Workers\",\"col\":4}},{\"id\":\"3\",\"type\":\"card\",\"data\":{\"card_name\":\"Attendance\",\"col\":4}},{\"id\":\"4\",\"type\":\"card\",\"data\":{\"card_name\":\"Payroll\",\"col\":4}},{\"id\":\"5\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
  "creation": "2026-05-23 07:22:00.000000",
  "docstatus": 0,
  "doctype": "Workspace",
@@ -7,6 +8,8 @@
  "hide_custom": 0,
  "icon": "users",
  "idx": 0,
+ "indicator_color": "orange",
+ "is_editable": 1,
  "is_hidden": 0,
  "label": "Subcontractor Management",
  "links": [

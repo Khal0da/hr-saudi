@@ -1,2 +1,3 @@
 hr_saudi.patches.add_hr_saudi_to_workspace
 hr_saudi.patches.create_default_settings
+hr_saudi.patches.create_hr_saudi_workspaces

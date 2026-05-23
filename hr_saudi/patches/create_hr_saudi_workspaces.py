@@ -110,6 +110,26 @@ def execute():
 				{"label": "Internal Transfer", "link_to": "Internal Transfer", "link_type": "DocType", "type": "Link", "hidden": 0, "is_query_report": 0, "onboard": 0}
 			],
 			"roles": [{"role": "HR Manager"}, {"role": "HR User"}, {"role": "System Manager"}]
+		},
+		{
+			"name": "Employee Custody",
+			"title": "Employee Custody",
+			"label": "Employee Custody",
+			"module": "HRSaudi",
+			"parent_page": "HR",
+			"public": 1,
+			"icon": "box",
+			"indicator_color": "yellow",
+			"is_editable": 1,
+			"content": '[{"id":"1","type":"header","data":{"text":"<span class=\\"h4\\">Employee Custody</span>","col":12}},{"id":"2","type":"card","data":{"card_name":"Custody Management","col":4}},{"id":"3","type":"card","data":{"card_name":"Reports","col":4}}]',
+			"links": [
+				{"label": "Custody Management", "link_count": 2, "type": "Card Break", "hidden": 0, "is_query_report": 0, "onboard": 0},
+				{"label": "Employee Custody", "link_to": "Employee Custody", "link_type": "DocType", "type": "Link", "hidden": 0, "is_query_report": 0, "onboard": 0},
+				{"label": "Custody Type", "link_to": "Custody Type", "link_type": "DocType", "type": "Link", "hidden": 0, "is_query_report": 0, "onboard": 0},
+				{"label": "Reports", "link_count": 1, "type": "Card Break", "hidden": 0, "is_query_report": 0, "onboard": 0},
+				{"label": "Employee Custody Summary", "link_to": "Employee Custody Summary", "link_type": "Report", "type": "Link", "hidden": 0, "is_query_report": 1, "onboard": 0}
+			],
+			"roles": [{"role": "HR Manager"}, {"role": "HR User"}, {"role": "Store Manager"}, {"role": "System Manager"}]
 		}
 	]
 

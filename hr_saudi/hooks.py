@@ -18,7 +18,7 @@ after_migrate = "hr_saudi.hrsaudi.setup.after_migrate"
 
 app_include_js = ["hr_saudi.bundle.js"]
 
- scheduler_events = {
+scheduler_events = {
 	"daily": [
 		"hr_saudi.hrsaudi.attendance.generator.generate_daily_attendance",
 		"hr_saudi.hrsaudi.notification.document_expiry.check_expiring_documents",

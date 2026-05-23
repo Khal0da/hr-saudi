@@ -12,93 +12,55 @@ def execute():
 		frappe.log_error(f"Workspace {workspace_name} not found")
 		return
 	
-	saudi_cards = [
+	saudi_links = [
 		{
 			"label": "Saudi Operations",
-			"link_count": 5,
 			"type": "Card Break",
-			"hidden": 0,
-			"is_query_report": 0,
-			"onboard": 0,
-		},
-		{
-			"label": "Biometric User Mapping",
-			"link_to": "Biometric User Mapping",
-			"link_type": "DocType",
-			"type": "Link",
-			"hidden": 0,
-			"is_query_report": 0,
-			"onboard": 0,
-		},
-		{
-			"label": "Attendance Settings",
-			"link_to": "Attendance Settings",
-			"link_type": "DocType",
-			"type": "Link",
-			"hidden": 0,
-			"is_query_report": 0,
-			"onboard": 0,
-		},
-		{
-			"label": "Geo Fence",
-			"link_to": "Geo Fence",
-			"link_type": "DocType",
-			"type": "Link",
-			"hidden": 0,
-			"is_query_report": 0,
-			"onboard": 0,
-		},
-		{
-			"label": "Crew",
-			"link_to": "Crew",
-			"link_type": "DocType",
-			"type": "Link",
-			"hidden": 0,
-			"is_query_report": 0,
-			"onboard": 0,
-		},
-		{
-			"label": "Site Deployment",
-			"link_to": "Site Deployment",
-			"link_type": "DocType",
-			"type": "Link",
-			"hidden": 0,
-			"is_query_report": 0,
-			"onboard": 0,
+			"links": [
+				"Biometric User Mapping",
+				"Attendance Settings",
+				"Geo Fence",
+				"Crew",
+				"Site Deployment",
+				"Document Expiry Tracker",
+			]
 		},
 		{
 			"label": "Saudization",
-			"link_count": 2,
 			"type": "Card Break",
-			"hidden": 0,
-			"is_query_report": 0,
-			"onboard": 0,
-		},
-		{
-			"label": "Job Requisition",
-			"link_to": "Job Requisition",
-			"link_type": "DocType",
-			"type": "Link",
-			"hidden": 0,
-			"is_query_report": 0,
-			"onboard": 0,
-		},
-		{
-			"label": "Saudization Settings",
-			"link_to": "Saudization Settings",
-			"link_type": "DocType",
-			"type": "Link",
-			"hidden": 0,
-			"is_query_report": 0,
-			"onboard": 0,
+			"links": [
+				"Job Requisition",
+				"Saudization Settings",
+			]
 		},
 	]
 	
 	existing_labels = [link.label for link in workspace.links if link.type == "Card Break"]
 	
-	for card in saudi_cards:
+	for card in saudi_links:
 		if card["label"] not in existing_labels:
-			workspace.append("links", card)
+			valid_links = [l for l in card["links"] if frappe.db.exists("DocType", l)]
+			
+			if valid_links:
+				workspace.append("links", {
+					"label": card["label"],
+					"link_count": len(valid_links),
+					"type": "Card Break",
+					"hidden": 0,
+					"is_query_report": 0,
+					"onboard": 0,
+				})
+				
+				for link_name in valid_links:
+					workspace.append("links", {
+						"label": link_name,
+						"link_to": link_name,
+						"link_type": "DocType",
+						"type": "Link",
+						"hidden": 0,
+						"is_query_report": 0,
+						"onboard": 0,
+					})
 	
 	workspace.save()
 	frappe.db.commit()

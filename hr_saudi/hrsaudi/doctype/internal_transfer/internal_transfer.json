@@ -1,0 +1,241 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-05-23 07:12:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "employee",
+  "employee_name",
+  "designation",
+  "column_break_1",
+  "transfer_date",
+  "status",
+  "transfer_type",
+  "section_break_1",
+  "from_branch",
+  "from_department",
+  "from_project",
+  "from_cost_center",
+  "column_break_2",
+  "to_branch",
+  "to_department",
+  "to_project",
+  "to_cost_center",
+  "section_break_2",
+  "reason",
+  "column_break_3",
+  "approved_by",
+  "approval_date",
+  "section_break_3",
+  "clearance_checklist",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "ITR-.YYYY.-",
+   "reqd": 1,
+   "default": "ITR-.YYYY.-"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "fetch_from": "employee.employee_name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "designation",
+   "fieldtype": "Link",
+   "label": "Designation",
+   "options": "Designation",
+   "fetch_from": "employee.designation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "transfer_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Transfer Date",
+   "reqd": 1,
+   "default": "Today"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nPending Approval\nApproved\nRejected\nCompleted",
+   "default": "Draft"
+  },
+  {
+   "fieldname": "transfer_type",
+   "fieldtype": "Select",
+   "label": "Transfer Type",
+   "options": "Branch Transfer\nProject Transfer\nDepartment Transfer\nTemporary Assignment",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break",
+   "label": "Transfer Details"
+  },
+  {
+   "fieldname": "from_branch",
+   "fieldtype": "Link",
+   "label": "From Branch",
+   "options": "Branch",
+   "fetch_from": "employee.branch",
+   "read_only": 1
+  },
+  {
+   "fieldname": "from_department",
+   "fieldtype": "Link",
+   "label": "From Department",
+   "options": "Department",
+   "fetch_from": "employee.department",
+   "read_only": 1
+  },
+  {
+   "fieldname": "from_project",
+   "fieldtype": "Link",
+   "label": "From Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "from_cost_center",
+   "fieldtype": "Link",
+   "label": "From Cost Center",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_branch",
+   "fieldtype": "Link",
+   "label": "To Branch",
+   "options": "Branch"
+  },
+  {
+   "fieldname": "to_department",
+   "fieldtype": "Link",
+   "label": "To Department",
+   "options": "Department"
+  },
+  {
+   "fieldname": "to_project",
+   "fieldtype": "Link",
+   "label": "To Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "to_cost_center",
+   "fieldtype": "Link",
+   "label": "To Cost Center",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "section_break_2",
+   "fieldtype": "Section Break",
+   "label": "Approval"
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Small Text",
+   "label": "Reason for Transfer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "approved_by",
+   "fieldtype": "Link",
+   "label": "Approved By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approval_date",
+   "fieldtype": "Date",
+   "label": "Approval Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_3",
+   "fieldtype": "Section Break",
+   "label": "Clearance Checklist"
+  },
+  {
+   "fieldname": "clearance_checklist",
+   "fieldtype": "Table",
+   "label": "Clearance Checklist",
+   "options": "Internal Transfer Clearance"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Internal Transfer",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-05-23 07:12:00.000000",
+ "modified_by": "Administrator",
+ "module": "HRSaudi",
+ "name": "Internal Transfer",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

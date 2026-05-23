@@ -49,6 +49,20 @@ def execute():
 				"Subcontractor Utilization",
 			]
 		},
+		{
+			"label": "Payroll Distribution",
+			"type": "Card Break",
+			"links": [
+				"Payroll Cost Distribution",
+			]
+		},
+		{
+			"label": "Internal Transfers",
+			"type": "Card Break",
+			"links": [
+				"Internal Transfer",
+			]
+		},
 	]
 	
 	existing_labels = [link.label for link in workspace.links if link.type == "Card Break"]

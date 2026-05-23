@@ -166,6 +166,20 @@ custom_fields = {
 			"options": "WPS Batch",
 			"insert_after": "custom_gosi_employer_amount",
 			"read_only": 1
+		},
+		{
+			"fieldname": "custom_cost_center",
+			"label": "Cost Center",
+			"fieldtype": "Link",
+			"options": "Cost Center",
+			"insert_after": "custom_wps_batch"
+		},
+		{
+			"fieldname": "custom_project_ref",
+			"label": "Project",
+			"fieldtype": "Link",
+			"options": "Project",
+			"insert_after": "custom_cost_center"
 		}
 	],
 	"Payroll Entry": [
